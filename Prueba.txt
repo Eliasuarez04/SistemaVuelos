@@ -1,0 +1,76 @@
+-- Creación de la tabla Vuelo
+CREATE TABLE Vuelo (
+    VueloID serial PRIMARY KEY,
+    NumeroVuelo varchar(20) NOT NULL,
+    Aerolinea varchar(50) NOT NULL,
+    FechaHoraSalida timestamp NOT NULL,
+    Origen varchar(50) NOT NULL,
+    Destino varchar(50) NOT NULL,
+    OtrosDetalles text
+);
+
+-- Creación de la tabla Pasajero
+CREATE TABLE Pasajero (
+    PasajeroID serial PRIMARY KEY,
+    Nombre varchar(50) NOT NULL,
+    Apellido varchar(50) NOT NULL,
+    NumeroPasaporte varchar(20) UNIQUE NOT NULL,
+    InformacionContacto text,
+    OtrosDetalles text
+);
+
+-- Creación de la tabla Asiento
+CREATE TABLE Asiento (
+    AsientoID serial PRIMARY KEY,
+    NumeroAsiento varchar(10) NOT NULL,
+    Clase varchar(20) NOT NULL,
+    EstadoDisponibilidad varchar(20) NOT NULL,
+    UbicacionCabina varchar(50),
+    OtrosDetalles text
+);
+
+-- Creación de la tabla Maleta
+CREATE TABLE Maleta (
+    MaletaID serial PRIMARY KEY,
+    Peso numeric(10,2) NOT NULL,
+    Dimensiones text NOT NULL,
+    Estado varchar(20) NOT NULL,
+    TipoEquipaje varchar(20) NOT NULL,
+    PasajeroID int REFERENCES Pasajero(PasajeroID),
+    OtrosDetalles text
+);
+
+-- Creación de la tabla Reservacion
+CREATE TABLE Reservacion (
+    ReservacionID serial PRIMARY KEY,
+    FechaHoraReserva timestamp NOT NULL,
+    OtrosDetalles text,
+    PasajeroID int REFERENCES Pasajero(PasajeroID),
+    VueloID int REFERENCES Vuelo(VueloID)
+);
+
+-- Creación de la tabla Check-in
+CREATE TABLE Checkin (
+    CheckinID serial PRIMARY KEY,
+    FechaHoraCheckin timestamp NOT NULL,
+    OtrosDetalles text,
+    PasajeroID int REFERENCES Pasajero(PasajeroID),
+    VueloID int REFERENCES Vuelo(VueloID)
+);
+
+-- Creación de la tabla OtrosAspectos
+CREATE TABLE OtrosAspectos (
+    OtrosAspectosID serial PRIMARY KEY,
+    Detalles text
+);
+
+-- Relaciones muchos a muchos entre Vuelo y Pasajero
+CREATE TABLE VueloPasajero (
+    VueloID int REFERENCES Vuelo(VueloID),
+    PasajeroID int REFERENCES Pasajero(PasajeroID),
+    PRIMARY KEY (VueloID, PasajeroID)
+);
+
+
+--Diagrama
+--https://app.genmymodel.com/api/projects/_TFHjYHtxEe6JeOeJFEpGGg/diagrams/_TFIKcXtxEe6JeOeJFEpGGg/svg
